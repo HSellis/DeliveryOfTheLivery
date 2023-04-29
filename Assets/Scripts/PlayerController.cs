@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        counter_text.text = liveriesStolen.ToString();
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (closeEnemy != null && !closeEnemy.isAggro)
@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
             thirdPersonController.SprintSpeed *= 0.9f;
             thirdPersonController.JumpHeight *= 0.9f;
             Debug.Log("Stolen! You now have "+liveriesStolen+" liveries and your speends are now as follows: speed: "+thirdPersonController.MoveSpeed+" sprint: "+thirdPersonController.SprintSpeed+" jump height: "+thirdPersonController.JumpHeight);
+            counter_text.text = liveriesStolen.ToString();
         }
         
     }
