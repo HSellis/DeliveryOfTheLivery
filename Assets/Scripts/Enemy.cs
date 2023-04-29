@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
         // Check if player is in FOV
         Vector3 directionToPlayer = playerTrans.position - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
-        Debug.Log(angle);
+        //Debug.Log(angle);
         Debug.DrawRay(transform.position, directionToPlayer, UnityEngine.Color.red);
         if (angle < viewAngle / 2)
         {
@@ -84,5 +84,10 @@ public class Enemy : MonoBehaviour
             
         }
 
+    }
+
+    public void StealLivery()
+    {
+        target = playerTrans;
     }
 }
