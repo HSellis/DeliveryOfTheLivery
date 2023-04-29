@@ -3372,6 +3372,7 @@ GameObject:
   - component: {fileID: 1195383106}
   - component: {fileID: 1195383108}
   - component: {fileID: 1195383107}
+  - component: {fileID: 1195383109}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -3496,6 +3497,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195383105}
   m_CullTransparentMesh: 1
+--- !u!114 &1195383109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195383105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83f2dee1a9179d4e95669fa5f3ea3a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  liveriesStolen: 0
+  Score: {fileID: 1195383105}
+  Chest: {fileID: 0}
 --- !u!1001 &1221041499
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9810,6 +9826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   liveriesStolen: 0
+  Score: {fileID: 0}
   Chest: {fileID: 2719569588270957978}
 --- !u!4 &6983258930626336602
 Transform:
