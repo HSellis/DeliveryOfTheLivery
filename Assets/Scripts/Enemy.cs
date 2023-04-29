@@ -57,11 +57,11 @@ public class Enemy : MonoBehaviour
         if (playerInVision)
         {
             navMeshAgent.destination = playerTrans.position;
-            GoAggro();
+            if (!isAggro) GoAggro();
         } else
         {
             navMeshAgent.destination = waypoints[currentWaypoint].position;
-            LoseAggro();
+            if (isAggro) LoseAggro();
         }
 
 
