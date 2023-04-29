@@ -3,30 +3,36 @@ using System.Collections.Generic;
 using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour
 {
     public float viewAngle = 90f;
     public float viewDistance = 10f;
-    public float moveSpeed = 1;
-    public float rotationSpeed = 1;
+    public float aggroSpeed = 5f;
+    public float normalSpeed = 3f;
+
+    public bool isAggro = false;
 
     public LayerMask terrainMask;
     public Transform[] waypoints;
 
     private Transform playerTrans;
-    private Transform target;
     private int currentWaypoint = 0;
-    private bool isAggro = false;
+    
 
     public Transform Chest;
     public GameObject Clothing;
 
+    private NavMeshAgent navMeshAgent;
+
     private void Start()
     {
         playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
-        target = playerTrans;
+        
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.destination = playerTrans.position;
     }
 
     void Update()
@@ -43,36 +49,21 @@ public class Enemy : MonoBehaviour
             if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, terrainMask))
             {
                 Debug.Log("Player in FOV");
-                target = playerTrans;
-                isAggro = true;
+                navMeshAgent.destination = playerTrans.position;
+                GoAggro();
             }
             else
             {
-                target = waypoints[currentWaypoint];
-                isAggro = false;
+                navMeshAgent.destination = waypoints[currentWaypoint].position;
+                LoseAggro();
             }
         }
 
 
-        // Move towards target
-        Vector3 directionToTarget = target.position - transform.position;
-        float waypointAngle = Vector3.Angle(transform.forward, directionToTarget);
-        if (waypointAngle > 2)
-        {
-
-            //create the rotation we need to be in to look at the target
-            Quaternion lookRotation = Quaternion.LookRotation(directionToTarget.normalized);
-
-            //rotate us over time according to speed until we are in the required rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-        } else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
-        }
 
 
-        float distanceToTarget = Vector3.Distance(target.position, transform.position);
-        if (distanceToTarget < 1)
+        float distanceToTarget = Vector3.Distance(navMeshAgent.destination, transform.position);
+        if (distanceToTarget < 2)
         {
             if (isAggro)
             {
@@ -82,7 +73,7 @@ public class Enemy : MonoBehaviour
             {
                 currentWaypoint++;
                 if (currentWaypoint == waypoints.Length) currentWaypoint = 0;
-                target = waypoints[currentWaypoint];
+                navMeshAgent.destination = waypoints[currentWaypoint].position;
             }
             
         }
@@ -91,7 +82,20 @@ public class Enemy : MonoBehaviour
 
     public void StealLivery()
     {
-        target = playerTrans;
-        
+        navMeshAgent.destination = playerTrans.position;
+        Clothing = null;
+        GoAggro();
+    }
+
+    private void GoAggro()
+    {
+        isAggro = true;
+        navMeshAgent.speed = aggroSpeed;
+    }
+
+    private void LoseAggro()
+    {
+        isAggro = false;
+        navMeshAgent.speed = normalSpeed;
     }
 }

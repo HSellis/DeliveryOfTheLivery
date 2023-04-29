@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (closeEnemy != null)
+            if (closeEnemy != null && !closeEnemy.isAggro)
             {
                 AttemptStealLivery(closeEnemy);
             }
