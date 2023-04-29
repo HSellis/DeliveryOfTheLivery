@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     private int currentWaypoint = 0;
     private bool isAggro = false;
 
+    public Transform Chest;
+    public GameObject Clothing;
+
     private void Start()
     {
         playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
@@ -89,5 +92,6 @@ public class Enemy : MonoBehaviour
     public void StealLivery()
     {
         target = playerTrans;
+        
     }
 }
