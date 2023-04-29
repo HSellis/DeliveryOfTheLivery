@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         counter_text = Score.GetComponent<TextMeshProUGUI>();
+        liveriesStolen++;
+        counter_text.text = "Liveries stolen: " + liveriesStolen.ToString();
     }
 
     // Update is called once per frame
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
             thirdPersonController.SprintSpeed *= 0.9f;
             thirdPersonController.JumpHeight *= 0.9f;
             Debug.Log("Stolen! You now have "+liveriesStolen+" liveries and your speends are now as follows: speed: "+thirdPersonController.MoveSpeed+" sprint: "+thirdPersonController.SprintSpeed+" jump height: "+thirdPersonController.JumpHeight);
-            counter_text.text = liveriesStolen.ToString();
+            counter_text.text = "Liveries stolen: "+liveriesStolen.ToString();
         }
         
     }
