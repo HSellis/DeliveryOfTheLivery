@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using StarterAssets;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,17 +11,22 @@ public class PlayerController : MonoBehaviour
 
     public int liveriesStolen = 0;
 
+    public GameObject Score;
+    TextMeshProUGUI counter_text;
+
     public Transform Chest;
 
     // Start is called before the first frame update
     void Start()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
+        counter_text = Score.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        counter_text.text = liveriesStolen.ToString();
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (closeEnemy != null)
@@ -65,6 +71,7 @@ public class PlayerController : MonoBehaviour
             thirdPersonController.MoveSpeed *= 0.9f;
             thirdPersonController.SprintSpeed *= 0.9f;
             thirdPersonController.JumpHeight *= 0.9f;
+            Debug.Log("Stolen! You now have "+liveriesStolen+" liveries and your speends are now as follows: speed: "+thirdPersonController.MoveSpeed+" sprint: "+thirdPersonController.SprintSpeed+" jump height: "+thirdPersonController.JumpHeight);
         }
         
     }
