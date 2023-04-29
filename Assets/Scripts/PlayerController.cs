@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private Enemy closeEnemy;
     private ThirdPersonController thirdPersonController;
 
+    public Transform Chest;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,9 +48,19 @@ public class PlayerController : MonoBehaviour
 
     private void StealLivery(Enemy enemy)
     {
+        GameObject newLivery = enemy.Clothing;
+        newLivery.transform.parent = Chest;
+        newLivery.transform.localRotation = Quaternion.identity;
+        newLivery.transform.localPosition = new Vector3(0, -1.1f, 0);
+        
+        
+
         enemy.StealLivery();
+
         thirdPersonController.MoveSpeed *= 0.9f;
         thirdPersonController.SprintSpeed *= 0.9f;
+        thirdPersonController.JumpHeight *= 0.9f;
+
     }
 
 }
