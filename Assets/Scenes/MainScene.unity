@@ -9826,7 +9826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   liveriesStolen: 0
-  Score: {fileID: 0}
+  Score: {fileID: 1195383105}
   Chest: {fileID: 2719569588270957978}
 --- !u!4 &6983258930626336602
 Transform:

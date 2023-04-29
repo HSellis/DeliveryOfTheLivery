@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
         counter_text.text = liveriesStolen.ToString();
         if (Input.GetKeyDown(KeyCode.E))
         {
+            Debug.Log(closeEnemy.isAggro);
             if (closeEnemy != null && !closeEnemy.isAggro)
             {
                 AttemptStealLivery(closeEnemy);

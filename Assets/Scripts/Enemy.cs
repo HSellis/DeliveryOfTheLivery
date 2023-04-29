@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     public float viewDistance = 10f;
     public float aggroSpeed = 5f;
     public float normalSpeed = 3f;
+    public float aggroRotationSpeed = 360;
+    public float normalRotationSpeed = 120;
 
     public bool isAggro = false;
 
@@ -68,6 +70,11 @@ public class Enemy : MonoBehaviour
             if (isAggro)
             {
                 Debug.Log("Player dead");
+
+                LoseAggro();
+                currentWaypoint++;
+                if (currentWaypoint == waypoints.Length) currentWaypoint = 0;
+                navMeshAgent.destination = waypoints[currentWaypoint].position;
             }
             else
             {
@@ -91,11 +98,13 @@ public class Enemy : MonoBehaviour
     {
         isAggro = true;
         navMeshAgent.speed = aggroSpeed;
+        navMeshAgent.angularSpeed = aggroRotationSpeed;
     }
 
     private void LoseAggro()
     {
         isAggro = false;
         navMeshAgent.speed = normalSpeed;
+        navMeshAgent.angularSpeed = normalRotationSpeed;
     }
 }
