@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using StarterAssets;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     private Enemy closeEnemy;
+    private ThirdPersonController thirdPersonController;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        thirdPersonController = GetComponent<ThirdPersonController>();
     }
 
     // Update is called once per frame
@@ -19,7 +21,7 @@ public class PlayerController : MonoBehaviour
         {
             if (closeEnemy != null)
             {
-                closeEnemy.StealLivery();
+                StealLivery(closeEnemy);
             }
         }
     }
@@ -40,6 +42,13 @@ public class PlayerController : MonoBehaviour
         {
             closeEnemy = null;
         }
+    }
+
+    private void StealLivery(Enemy enemy)
+    {
+        enemy.StealLivery();
+        thirdPersonController.MoveSpeed *= 0.9f;
+        thirdPersonController.SprintSpeed *= 0.9f;
     }
 
 }
