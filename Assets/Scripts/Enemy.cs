@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
 {
     public float viewAngle = 90f;
     public float viewDistance = 10f;
-    public float aggroSpeed = 5f;
+    public float aggroSpeed = 6f;
     public float normalSpeed = 3f;
     public float aggroRotationSpeed = 360;
     public float normalRotationSpeed = 120;
@@ -44,21 +44,24 @@ public class Enemy : MonoBehaviour
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         //Debug.Log(angle);
         Debug.DrawRay(transform.position, directionToPlayer, UnityEngine.Color.red);
+        bool playerInVision = false;
         if (angle < viewAngle / 2)
         {
-
             float distanceToPlayer = Vector3.Distance(transform.position, playerTrans.position);
             if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, terrainMask))
             {
-                Debug.Log("Player in FOV");
-                navMeshAgent.destination = playerTrans.position;
-                GoAggro();
+                playerInVision = true;
             }
-            else
-            {
-                navMeshAgent.destination = waypoints[currentWaypoint].position;
-                LoseAggro();
-            }
+        }
+
+        if (playerInVision)
+        {
+            navMeshAgent.destination = playerTrans.position;
+            GoAggro();
+        } else
+        {
+            navMeshAgent.destination = waypoints[currentWaypoint].position;
+            LoseAggro();
         }
 
 
@@ -96,6 +99,7 @@ public class Enemy : MonoBehaviour
 
     private void GoAggro()
     {
+        Debug.Log("Aggro");
         isAggro = true;
         navMeshAgent.speed = aggroSpeed;
         navMeshAgent.angularSpeed = aggroRotationSpeed;
@@ -103,6 +107,7 @@ public class Enemy : MonoBehaviour
 
     private void LoseAggro()
     {
+        Debug.Log("Lose aggro");
         isAggro = false;
         navMeshAgent.speed = normalSpeed;
         navMeshAgent.angularSpeed = normalRotationSpeed;
