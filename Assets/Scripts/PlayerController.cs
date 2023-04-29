@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private Enemy closeEnemy;
     private ThirdPersonController thirdPersonController;
 
+    public int liveriesStolen = 0;
+
     public Transform Chest;
 
     // Start is called before the first frame update
@@ -23,7 +25,7 @@ public class PlayerController : MonoBehaviour
         {
             if (closeEnemy != null)
             {
-                StealLivery(closeEnemy);
+                AttemptStealLivery(closeEnemy);
             }
         }
     }
@@ -46,21 +48,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void StealLivery(Enemy enemy)
+    private void AttemptStealLivery(Enemy enemy)
     {
         GameObject newLivery = enemy.Clothing;
-        newLivery.transform.parent = Chest;
-        newLivery.transform.localRotation = Quaternion.identity;
-        newLivery.transform.localPosition = new Vector3(0, -1.1f, 0);
+        if (newLivery != null)
+        {
+            liveriesStolen++;
+
+            newLivery.transform.parent = Chest;
+            newLivery.transform.localRotation = Quaternion.identity;
+            newLivery.transform.localPosition = new Vector3(0, -1.9f, 0);
+            float liveryScale = 1 + liveriesStolen * 0.1f;
+            newLivery.transform.localScale = new Vector3(liveryScale, liveryScale, liveryScale);
+            enemy.StealLivery();
+
+            thirdPersonController.MoveSpeed *= 0.9f;
+            thirdPersonController.SprintSpeed *= 0.9f;
+            thirdPersonController.JumpHeight *= 0.9f;
+        }
         
-        
-
-        enemy.StealLivery();
-
-        thirdPersonController.MoveSpeed *= 0.9f;
-        thirdPersonController.SprintSpeed *= 0.9f;
-        thirdPersonController.JumpHeight *= 0.9f;
-
     }
 
 }
