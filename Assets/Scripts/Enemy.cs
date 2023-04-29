@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
     public GameObject Clothing;
 
     private NavMeshAgent navMeshAgent;
+    private Animator animator;
+    private bool deAggroCooldownOver = false;
 
     private void Start()
     {
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
         
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.destination = playerTrans.position;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -58,17 +61,17 @@ public class Enemy : MonoBehaviour
         {
             navMeshAgent.destination = playerTrans.position;
             if (!isAggro) GoAggro();
-        } else
-        {
-            navMeshAgent.destination = waypoints[currentWaypoint].position;
-            if (isAggro) LoseAggro();
-        }
+        } else if (isAggro && deAggroCooldownOver)
+            {
+                navMeshAgent.destination = waypoints[currentWaypoint].position;
+                LoseAggro();
+            }
 
 
 
 
         float distanceToTarget = Vector3.Distance(navMeshAgent.destination, transform.position);
-        if (distanceToTarget < 2)
+        if (distanceToTarget < 1)
         {
             if (isAggro)
             {
@@ -101,8 +104,12 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Aggro");
         isAggro = true;
+        deAggroCooldownOver = false;
         navMeshAgent.speed = aggroSpeed;
         navMeshAgent.angularSpeed = aggroRotationSpeed;
+        animator.SetFloat("Speed", aggroSpeed);
+
+        Invoke("aggroCooldownOver", 2);
     }
 
     private void LoseAggro()
@@ -110,6 +117,12 @@ public class Enemy : MonoBehaviour
         Debug.Log("Lose aggro");
         isAggro = false;
         navMeshAgent.speed = normalSpeed;
+        animator.SetFloat("Speed", normalSpeed);
         navMeshAgent.angularSpeed = normalRotationSpeed;
+    }
+
+    private void aggroCooldownOver()
+    {
+        deAggroCooldownOver = true;
     }
 }
