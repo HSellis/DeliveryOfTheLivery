@@ -31,14 +31,14 @@ public class Enemy : MonoBehaviour
     
 
     public Transform Chest;
-    public GameObject Clothing;
+    public GameObject Livery;
 
     private NavMeshAgent navMeshAgent;
     private Animator animator;
 
     private void Start()
     {
-        Instantiate(Clothing, Chest);
+        Livery = Instantiate(Livery, Chest);
 
         state = 0;
         playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
 
     public void StealLivery()
     {
-        Clothing = null;
+        Livery = null;
         transitionState(3);
         Invoke("EndDisoriented", 1.5f);
 

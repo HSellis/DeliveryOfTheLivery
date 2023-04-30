@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     private void AttemptStealLivery(Enemy enemy)
     {
-        GameObject newLivery = enemy.Clothing;
+        GameObject newLivery = enemy.Livery;
         if (newLivery != null)
         {
             liveriesStolen++;
