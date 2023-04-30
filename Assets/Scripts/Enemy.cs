@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
         if (state == 0 || state == 1 || state == 2)
         {
             float distanceToTarget = Vector3.Distance(navMeshAgent.destination, transform.position);
-            if (distanceToTarget < 2)
+            if (distanceToTarget < 1)
             {
                 if (state == 0)
                 {
@@ -98,10 +98,17 @@ public class Enemy : MonoBehaviour
                     navMeshAgent.destination = waypoints[currentWaypoint].position;
                 } else if (state == 1)
                 {
-                    // reached player
-                    gameController.GameOver();
-                    transitionState(0);
+                    float distanceToPlayer = Vector3.Distance(playerTrans.position, transform.position);
+                    if (distanceToPlayer < 1.5f)
+                    {
+                        // reached player
+                        gameController.GameOver();
+                        
+                    }
                     
+                    
+                    transitionState(0);
+
                 } else if (state == 2)
                 {
                     // reached last known location of player
@@ -109,6 +116,9 @@ public class Enemy : MonoBehaviour
                     Invoke("StartPatrol", Random.Range(2.5f, 5));
                 }
             }
+        } else if (state == 1)
+        {
+            
         }
         
 

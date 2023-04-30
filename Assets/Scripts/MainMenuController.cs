@@ -4,30 +4,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Menu_Control : MonoBehaviour
+public class MainMenuController : MonoBehaviour
 {
-    public Button Button_Start;
-    public Button Button_Quit;
+    public Button ButtonStart;
+    public Button ButtonQuit;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Buttons are now working!");
-        Button start = Button_Start.GetComponent<Button>();
-        Button quit = Button_Quit.GetComponent<Button>();
+        Button start = ButtonStart.GetComponent<Button>();
+        Button quit = ButtonQuit.GetComponent<Button>();
         start.onClick.AddListener(ClickedStart);
         quit.onClick.AddListener(ClickedQuit);
     }
 
     void ClickedStart()
     {
-        Debug.Log("The game begins!");
         SceneManager.LoadScene("MainScene");
     }
 
     void ClickedQuit()
     {
-        Debug.Log("Game quitted. If it was a real game, not only would the application be upset, but it would also quit.");
         Application.Quit();
     }
 }
