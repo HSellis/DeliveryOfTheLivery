@@ -1876,16 +1876,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afb52776812d6b4999e80112d7b2ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewAngle: 90
+  viewAngle: 145
   viewDistance: 10
   aggroSpeed: 2
   normalSpeed: 1
-  aggroRotationSpeed: 360
+  aggroRotationSpeed: 1000
   normalRotationSpeed: 120
-  isAggro: 0
+  state: 0
   terrainMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -1930,9 +1930,9 @@ NavMeshAgent:
   m_GameObject: {fileID: 6527020257877532674}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.25
   m_Speed: 2
-  m_Acceleration: 8
+  m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0

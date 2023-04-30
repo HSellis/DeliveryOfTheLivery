@@ -31,8 +31,7 @@ public class PlayerController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(closeEnemy.isAggro);
-            if (closeEnemy != null && !closeEnemy.isAggro)
+            if (closeEnemy != null && closeEnemy.state != 1)
             {
                 AttemptStealLivery(closeEnemy);
             }
@@ -60,7 +59,6 @@ public class PlayerController : MonoBehaviour
     private void AttemptStealLivery(Enemy enemy)
     {
         GameObject newLivery = enemy.Clothing;
-        Debug.Log(enemy.isAggro);
         if (newLivery != null)
         {
             liveriesStolen++;

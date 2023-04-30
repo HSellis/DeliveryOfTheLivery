@@ -15,12 +15,18 @@ public class Enemy : MonoBehaviour
     public float aggroRotationSpeed = 360;
     public float normalRotationSpeed = 120;
 
-    public bool isAggro = false;
 
+    public int state;
+    // 0 - patrolling
+    // 1 - currently sees player
+    // 2 - going to last known location of player
+    // 3 - AFK
+    
     public LayerMask terrainMask;
     public Transform[] waypoints;
 
     private Transform playerTrans;
+    private Vector3 lastKnownPlayerLocation;
     private int currentWaypoint = 0;
     
 
@@ -29,10 +35,10 @@ public class Enemy : MonoBehaviour
 
     private NavMeshAgent navMeshAgent;
     private Animator animator;
-    private bool deAggroCooldownOver = false;
 
     private void Start()
     {
+        state = 0;
         playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
         
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -45,7 +51,7 @@ public class Enemy : MonoBehaviour
         // Check if player is in FOV
         Vector3 directionToPlayer = playerTrans.position - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
-        //Debug.Log(angle);
+        
         Debug.DrawRay(transform.position, directionToPlayer, UnityEngine.Color.red);
         bool playerInVision = false;
         if (angle < viewAngle / 2)
@@ -59,70 +65,104 @@ public class Enemy : MonoBehaviour
 
         if (playerInVision)
         {
-            navMeshAgent.destination = playerTrans.position;
-            if (!isAggro) GoAggro();
-        } else if (isAggro && deAggroCooldownOver)
-            {
-                navMeshAgent.destination = waypoints[currentWaypoint].position;
-                LoseAggro();
-            }
-
-
-
-
-        float distanceToTarget = Vector3.Distance(navMeshAgent.destination, transform.position);
-        if (distanceToTarget < 1)
-        {
-            if (isAggro)
-            {
-                Debug.Log("Player dead");
-
-                LoseAggro();
-                currentWaypoint++;
-                if (currentWaypoint == waypoints.Length) currentWaypoint = 0;
-                navMeshAgent.destination = waypoints[currentWaypoint].position;
-            }
-            else
-            {
-                currentWaypoint++;
-                if (currentWaypoint == waypoints.Length) currentWaypoint = 0;
-                navMeshAgent.destination = waypoints[currentWaypoint].position;
-            }
-            
+            lastKnownPlayerLocation = playerTrans.position;
+            if (state == 0 || state == 2 || state == 3) transitionState(1);
         }
+
+
+
+        if (state == 0 || state == 1 || state == 2)
+        {
+            float distanceToTarget = Vector3.Distance(navMeshAgent.destination, transform.position);
+            if (distanceToTarget < 2)
+            {
+                if (state == 0)
+                {
+                    // reached waypoint
+                    currentWaypoint++;
+                    if (currentWaypoint == waypoints.Length) currentWaypoint = 0;
+                    navMeshAgent.destination = waypoints[currentWaypoint].position;
+                } else if (state == 1)
+                {
+                    // reached player
+                    Debug.Log("Player dead");
+                    transitionState(0);
+                } else if (state == 2)
+                {
+                    // reached last known location of player
+                    transitionState(3);
+                    Invoke("StartPatrol", Random.Range(2.5f, 5));
+                }
+            }
+        }
+        
 
     }
 
     public void StealLivery()
     {
-        navMeshAgent.destination = playerTrans.position;
         Clothing = null;
-        GoAggro();
+        transitionState(3);
+        Invoke("EndDisoriented", 1.5f);
+
+
+    }
+
+    private void transitionState(int toState)
+    {
+        Debug.Log("transition to " + toState.ToString());
+        if (toState == 0)
+        {
+            // start patrol
+            state = 0;
+            navMeshAgent.destination = waypoints[currentWaypoint].position;
+            LoseAggro();
+        } else if (toState == 1)
+        {
+            // notice player
+            state = 1;
+            navMeshAgent.destination = playerTrans.position;
+            GoAggro();
+        } else if (toState == 2)
+        {
+            // start going to last known player location
+            state = 2;
+            navMeshAgent.destination = lastKnownPlayerLocation;
+            GoAggro();
+        } else if (toState == 3)
+        {
+            // wait for a bit
+            state = 3;
+            navMeshAgent.destination = transform.position;
+            LoseAggro();
+        }
     }
 
     private void GoAggro()
     {
         Debug.Log("Aggro");
-        isAggro = true;
-        deAggroCooldownOver = false;
+        
         navMeshAgent.speed = aggroSpeed;
         navMeshAgent.angularSpeed = aggroRotationSpeed;
-        animator.SetFloat("Speed", aggroSpeed);
-
-        Invoke("aggroCooldownOver", 2);
+        animator.SetFloat("Speed", 1);
     }
 
     private void LoseAggro()
     {
         Debug.Log("Lose aggro");
-        isAggro = false;
         navMeshAgent.speed = normalSpeed;
-        animator.SetFloat("Speed", normalSpeed);
+        animator.SetFloat("Speed", 0);
         navMeshAgent.angularSpeed = normalRotationSpeed;
     }
 
-    private void aggroCooldownOver()
+    private void EndDisoriented()
     {
-        deAggroCooldownOver = true;
+        lastKnownPlayerLocation = playerTrans.position;
+        transitionState(1);
+    }
+
+    private void StartPatrol()
+    {
+        transitionState(0);
     }
 }
