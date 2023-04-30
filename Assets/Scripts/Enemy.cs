@@ -39,13 +39,16 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         Livery = Instantiate(Livery, Chest);
+        playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
+        lastKnownPlayerLocation = playerTrans.position;
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
+        navMeshAgent.destination = waypoints[0].position;
 
         state = 0;
-        playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
-        
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.destination = playerTrans.position;
-        animator = GetComponent<Animator>();
+        transitionState(0);
     }
 
     void Update()
@@ -108,7 +111,7 @@ public class Enemy : MonoBehaviour
 
     public void StealLivery()
     {
-        Livery = null;
+        Destroy(Livery.gameObject);
         transitionState(3);
         Invoke("EndDisoriented", 1.5f);
 
@@ -142,6 +145,7 @@ public class Enemy : MonoBehaviour
             state = 3;
             navMeshAgent.destination = transform.position;
             LoseAggro();
+            animator.SetFloat("Speed", 0);
         }
     }
 
@@ -158,7 +162,7 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Lose aggro");
         navMeshAgent.speed = normalSpeed;
-        animator.SetFloat("Speed", 0);
+        animator.SetFloat("Speed", 0.15f);
         navMeshAgent.angularSpeed = normalRotationSpeed;
     }
 

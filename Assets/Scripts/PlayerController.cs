@@ -62,13 +62,9 @@ public class PlayerController : MonoBehaviour
         if (newLivery != null)
         {
             liveriesStolen++;
-
-            newLivery.transform.parent = Chest;
-            newLivery.transform.localRotation = Quaternion.identity;
-            newLivery.transform.localPosition = new Vector3(0, -1.9f, 0);
-            float liveryScale = 1 + liveriesStolen * 0.1f;
-            newLivery.transform.localScale = new Vector3(liveryScale, liveryScale, liveryScale);
             enemy.StealLivery();
+            Instantiate(newLivery, Chest);
+            newLivery.transform.localScale *= (1 + liveriesStolen * 0.5f);
 
             thirdPersonController.MoveSpeed *= 0.9f;
             thirdPersonController.SprintSpeed *= 0.9f;
