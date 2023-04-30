@@ -38,6 +38,8 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        Instantiate(Clothing, Chest);
+
         state = 0;
         playerTrans = GameObject.FindGameObjectWithTag("Player Center").transform;
         
@@ -50,9 +52,11 @@ public class Enemy : MonoBehaviour
     {
         // Check if player is in FOV
         Vector3 directionToPlayer = playerTrans.position - transform.position;
+        Vector3 directionToLastknownPlayerLoc = lastKnownPlayerLocation - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         
         Debug.DrawRay(transform.position, directionToPlayer, UnityEngine.Color.red);
+        Debug.DrawRay(transform.position, directionToLastknownPlayerLoc, UnityEngine.Color.blue);
         bool playerInVision = false;
         if (angle < viewAngle / 2)
         {
@@ -67,6 +71,9 @@ public class Enemy : MonoBehaviour
         {
             lastKnownPlayerLocation = playerTrans.position;
             if (state == 0 || state == 2 || state == 3) transitionState(1);
+        } else
+        {
+            if (state == 1) transitionState(2);
         }
 
 
