@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using StarterAssets;
 using TMPro;
 using UnityEngine;
@@ -35,6 +36,8 @@ public class PlayerController : MonoBehaviour
             {
                 AttemptStealLivery(closeEnemy);
             }
+
+            
         }
     }
 
@@ -58,20 +61,19 @@ public class PlayerController : MonoBehaviour
 
     private void AttemptStealLivery(Enemy enemy)
     {
-        GameObject newLivery = enemy.Livery;
-        if (newLivery != null)
+        GameObject newLiveryPrefab = enemy.Livery;
+        if (newLiveryPrefab != null)
         {
-            liveriesStolen++;
             enemy.StealLivery();
-            Instantiate(newLivery, Chest);
-            Debug.Log(liveriesStolen);
-            newLivery.transform.localScale *= (1 + liveriesStolen * 0.5f);
+            GameObject newLivery = Instantiate(newLiveryPrefab, Chest);
+            float liveryScale = newLivery.transform.localScale.x * (1 + liveriesStolen * 0.25f);
+            newLivery.transform.localScale = Vector3.one * liveryScale * 2;
+            newLivery.transform.DOScale(liveryScale, 0.5f);
 
+            liveriesStolen++;
             thirdPersonController.MoveSpeed *= 0.9f;
             thirdPersonController.SprintSpeed *= 0.9f;
             thirdPersonController.JumpHeight *= 0.9f;
-            Debug.Log("Stolen! You now have "+liveriesStolen+" liveries and your speends are now as follows: speed: "+thirdPersonController.MoveSpeed+" sprint: "+thirdPersonController.SprintSpeed+" jump height: "+thirdPersonController.JumpHeight);
-            counter_text.text = "Liveries stolen: "+liveriesStolen.ToString();
         }
         
     }

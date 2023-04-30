@@ -97,6 +97,7 @@ public class Enemy : MonoBehaviour
                     // reached player
                     Debug.Log("Player dead");
                     transitionState(0);
+                    
                 } else if (state == 2)
                 {
                     // reached last known location of player
