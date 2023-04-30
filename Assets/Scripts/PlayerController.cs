@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
             liveriesStolen++;
             enemy.StealLivery();
             Instantiate(newLivery, Chest);
+            Debug.Log(liveriesStolen);
             newLivery.transform.localScale *= (1 + liveriesStolen * 0.5f);
 
             thirdPersonController.MoveSpeed *= 0.9f;
