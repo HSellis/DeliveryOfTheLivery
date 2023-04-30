@@ -12,18 +12,15 @@ public class PlayerController : MonoBehaviour
 
     public int liveriesStolen = 0;
 
-    public GameObject Score;
-    TextMeshProUGUI counter_text;
-
     public Transform Chest;
+
+    public GameController gameController;
 
     // Start is called before the first frame update
     void Start()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
-        counter_text = Score.GetComponent<TextMeshProUGUI>();
-        liveriesStolen++;
-        counter_text.text = "Liveries stolen: " + liveriesStolen.ToString();
+        gameController.UpdateLiveriesStolen(0);
     }
 
     // Update is called once per frame
@@ -36,8 +33,6 @@ public class PlayerController : MonoBehaviour
             {
                 AttemptStealLivery(closeEnemy);
             }
-
-            
         }
     }
 
@@ -74,6 +69,8 @@ public class PlayerController : MonoBehaviour
             thirdPersonController.MoveSpeed *= 0.9f;
             thirdPersonController.SprintSpeed *= 0.9f;
             thirdPersonController.JumpHeight *= 0.9f;
+
+            gameController.UpdateLiveriesStolen(liveriesStolen);
         }
         
     }
