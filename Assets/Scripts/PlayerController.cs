@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
+
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         gameController.UpdateLiveriesStolen(0);
     }
 

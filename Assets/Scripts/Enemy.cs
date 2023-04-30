@@ -36,6 +36,8 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     private Animator animator;
 
+    private GameController gameController;
+
     private void Start()
     {
         Livery = Instantiate(Livery, Chest);
@@ -49,6 +51,8 @@ public class Enemy : MonoBehaviour
 
         state = 0;
         transitionState(0);
+
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     void Update()
@@ -95,7 +99,7 @@ public class Enemy : MonoBehaviour
                 } else if (state == 1)
                 {
                     // reached player
-                    Debug.Log("Player dead");
+                    gameController.GameOver();
                     transitionState(0);
                     
                 } else if (state == 2)
