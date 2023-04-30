@@ -156,14 +156,14 @@ public class Enemy : MonoBehaviour
         
         navMeshAgent.speed = aggroSpeed;
         navMeshAgent.angularSpeed = aggroRotationSpeed;
-        animator.SetFloat("Speed", 1);
+        animator.SetFloat("Speed", 2);
     }
 
     private void LoseAggro()
     {
         Debug.Log("Lose aggro");
         navMeshAgent.speed = normalSpeed;
-        animator.SetFloat("Speed", 0.15f);
+        animator.SetFloat("Speed", 1);
         navMeshAgent.angularSpeed = normalRotationSpeed;
     }
 
